@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tube Station Party</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 20px 0;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Select Your Tube Station</h1>
+        <label for="station">Choose a station:</label>
+        <select id="station">
+            <option value="">Select a station...</option>
+        </select>
+        <button class="btn" onclick="selectStation()">Select</button>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        // Array of Tube stations (You can replace or expand this list as needed)
+        const stations = [
+            "Oxford Circus", "Baker Street", "King's Cross", "Covent Garden", 
+            "Piccadilly Circus", "Liverpool Street", "Waterloo", "Notting Hill Gate", 
+            "Tower Hill", "South Kensington"
+        ];
+
+        // Populate the dropdown with tube stations
+        const stationSelect = document.getElementById('station');
+        stations.forEach(station => {
+            const option = document.createElement('option');
+            option.value = station;
+            option.text = station;
+            stationSelect.appendChild(option);
+        });
+
+        function selectStation() {
+            const selectedStation = stationSelect.value;
+
+            if (!selectedStation) {
+                alert("Please select a station.");
+                return;
+            }
+
+            // Use Google Apps Script to check if the station has been selected
+            fetch(`https://script.google.com/macros/s/YOUR_GOOGLE_APPS_SCRIPT_URL/exec?station=${selectedStation}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        document.getElementById('message').innerText = `You have selected ${selectedStation}!`;
+                    } else {
+                        document.getElementById('message').innerText = `Sorry, ${selectedStation} is already taken. Please choose another.`;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
